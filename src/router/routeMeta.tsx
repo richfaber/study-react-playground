@@ -1,17 +1,20 @@
 // 라우트 메타 생성 유틸
+import type { ComponentType } from 'react';
+
+type LazyModule = { default: ComponentType<any> };
 
 // Vite 동적 import (코드 스플리팅)
-const modules = import.meta.glob('../page/**/*.{jsx,tsx}', { eager: false });
+const modules = import.meta.glob<LazyModule>('../page/**/*.{jsx,tsx}', { eager: false });
 
 // 제외 규칙
-function shouldInclude(path) {
+function shouldInclude(path: string) {
   if (/(?:^|\/)_/.test(path)) return false;    // 세그먼트가 _ 로 시작
   if (/__ignore/.test(path)) return false;    // __ignore 포함
   return true;
 }
 
 // 파일 경로 → URL
-function pathFromFile(filePath) {
+function pathFromFile(filePath: string) {
   const withoutPrefix = filePath.replace(/^\.\.\/page\//, '');
   const withoutExt = withoutPrefix.replace(/\.(jsx|tsx)$/, '');
   const segments = withoutExt
