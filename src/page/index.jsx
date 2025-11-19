@@ -12,16 +12,8 @@ export default function Main() {
       <ul style={{ listStyle: 'disc', paddingLeft: '1.25rem' }}>
         {list.map(r => (
           <li key={r.file}>
-            <Link to={r.path}>{r.path}</Link>
-            <small style={{ marginLeft: 8, color: '#888' }}>{r.file}</small>
-            {/:.+/.test(r.path) && (
-              <em style={{ marginLeft: 6 }}>
-                예시:&nbsp;
-                <Link to={r.path.replace(/:([^/]+)/g, 'sample')}>
-                  {r.path.replace(/:([^/]+)/g, 'sample')}
-                </Link>
-              </em>
-            )}
+            <Link to={r.path} target="_blank">{r.path}</Link>
+            <small style={{ marginLeft: 8, color: '#888' }}>{r.file.replace}</small>
           </li>
         ))}
       </ul>

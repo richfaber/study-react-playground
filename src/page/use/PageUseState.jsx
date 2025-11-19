@@ -6,11 +6,21 @@ export default function PageUseState() {
   const [a, setA] = useState()
   const [b, setB] = useState(0)
 
+  // 함수형 업데이트 가능, 지연초기화
   const [c, setC] = useState(() => 10)
+
 
   return (
     <>
       <h1>useState</h1>
+
+      <ul>
+        <li>
+          setVar 사용 시 얕은 비교를 사용하기 때문에, 병합 형태로 지정해야 watch 됨.<br />
+          즉 Object 를 그냥 넣으면, 갱신내용을 인식하지 못한다.
+          ex) setVar( {'{'} ...user {'}'}, name: 'John' )
+        </li>
+      </ul>
 
       <button type="button" className="item" onClick="{ () => setA( a + 1 ) }">
           a = { typeof a }
