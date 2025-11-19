@@ -6,7 +6,7 @@ export default function PageUseState() {
   const [a, setA] = useState()
   const [b, setB] = useState(0)
 
-  // 함수형 업데이트 가능, 지연초기화
+  // 지연초기화
   const [c, setC] = useState(() => 10)
 
 
