@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export default function PageUseState() {
+export default function UseState() {
 
   // a, b 는 사실상 같은거임. 비어두면 undefined 가 명시적으로 들어가게 되는 것임.
   const [a, setA] = useState<number | undefined>()

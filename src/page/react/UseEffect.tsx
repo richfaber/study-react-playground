@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export default function PageUseEffect() {
+export default function UseEffect() {
 
   const [callCount, setCallCount] = useState(0)
   const [notWatchCount, setNotWatchCount] = useState(0)
