@@ -8,9 +8,8 @@ export default function Main() {
   const list = routes.filter(r => r.path !== '/'); // 루트 자신 제외(원하면 제거)
 
   return (
-    <div style={{ padding: '1.5rem' }}>
-      <h2>자동 생성 라우트 목록</h2>
-      <ul style={{ listStyle: 'disc', paddingLeft: '1.25rem' }}>
+    <div>
+      <ul>
         {
           list.map(r => 
             {

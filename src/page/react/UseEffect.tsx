@@ -24,6 +24,7 @@ export default function UseEffect() {
 
   // callCount 시 에만 호출
   useEffect(() => {
+    
     console.log('dependencies [callCount]')
     
   }, [callCount])
@@ -42,7 +43,7 @@ export default function UseEffect() {
 
       <ul>
         <li>dependencies 를 비워둔 경우, 1회 호출, 값이 갱신되어도 호출하지 않는다.</li>
-        <li>setCallCount( callCount + 1 ) 절대로 dependencies 대상을 갱신하지 않는다 (무한루프)</li>
+        <li>useEffect( fn, dependencies ) 의 fn 내에서 useState 로 선언된 변수가 dependencies 대상이면, 갱신하면 안된다 (무한루프)</li>
         <li>useEffect( fn ) 의 fn 은 Async 사용할 수 없다. fn 내부에서는 가능</li>
       </ul>
 
