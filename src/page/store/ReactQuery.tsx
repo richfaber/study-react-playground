@@ -20,7 +20,7 @@ const fetchData = async () => {
     return data
 }
 
-function ReactQueryExam() {
+function ReactQuery() {
 
     const { isLoading, error, data } = useQuery<D1, AxiosError>({
 
