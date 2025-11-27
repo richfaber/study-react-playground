@@ -8,6 +8,7 @@ const dummyModel1: model1[] = Array.from({ length: 10 }, (_, idx) => ({
 
 export const handlers = [
     
-    http.get('/api/todo', () => HttpResponse.json(dummyModel1) )
+    http.get('/api/todo', () => HttpResponse.json(dummyModel1) ),
+    http.patch('/api/todo', () => HttpResponse.json(dummyModel1) )
 
 ]
