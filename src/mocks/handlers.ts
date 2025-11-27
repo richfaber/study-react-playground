@@ -1,14 +1,33 @@
 import { http, HttpResponse } from 'msw';
 import { model1 } from '../page/test/model1'
 
-const dummyModel1: model1[] = Array.from({ length: 10 }, (_, idx) => ({
-    name: '임꺽정' + idx,
-    age: Math.random() * 101
-}))
+const mockList: model1[] = [
+    { id: 1, name: '임꺽정1', age: 20 },
+    { id: 2, name: '임꺽정2', age: 21 },
+    { id: 3, name: '임꺽정3', age: 22 },
+    { id: 4, name: '임꺽정4', age: 23 },
+    { id: 5, name: '임꺽정5', age: 24 },
+    { id: 6, name: '임꺽정6', age: 25 },
+    { id: 7, name: '임꺽정7', age: 26 },
+    { id: 8, name: '임꺽정8', age: 27 },
+    { id: 9, name: '임꺽정9', age: 28 },
+    { id: 10, name: '임꺽정10', age: 29 }
+]
 
 export const handlers = [
+
+    http.get('/api/todo', () => HttpResponse.json(mockList)),
     
-    http.get('/api/todo', () => HttpResponse.json(dummyModel1) ),
-    http.patch('/api/todo', () => HttpResponse.json(dummyModel1) )
+    http.post('/api/todo', async ({ request }) => {
+
+        const newPost = await request.json() as model1;
+        newPost.id = mockList.length + 1;
+        mockList.push(newPost)
+
+        return HttpResponse.json(newPost, { status: 201 });
+
+    }),
+
+    http.patch('/api/todo', () => HttpResponse.json(mockList))
 
 ]
