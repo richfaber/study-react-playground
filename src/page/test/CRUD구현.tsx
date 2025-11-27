@@ -49,8 +49,7 @@ function OnMounted() {
     const postMutation = useMutation(postTodo, {
 
         onSuccess: () => {
-            // POST 성공 시, todo 목록을 자동으로 다시 가져옵니다.
-            handler.read();
+            updateTodoList();
             console.log('POST 성공!');
         }
 
@@ -59,8 +58,7 @@ function OnMounted() {
     const patchMutation = useMutation(patchTodo, {
 
         onSuccess: () => {
-            // POST 성공 시, todo 목록을 자동으로 다시 가져옵니다.
-            handler.read();
+            updateTodoList();
             console.log('Patch 성공!');
         }
 
@@ -69,21 +67,11 @@ function OnMounted() {
     const deleteMutation = useMutation(deleteTodo, {
 
         onSuccess: () => {
-            // POST 성공 시, todo 목록을 자동으로 다시 가져옵니다.
-            handler.read();
+            updateTodoList();
             console.log('Patch 성공!');
         }
 
     })
-
-    const handler = {
-
-        read() {
-            updateTodoList()
-        },
-
-    }
-
 
     return (
         <>
