@@ -46,4 +46,4 @@ function ReactQuery() {
 
 }
 
-export default ReactQueryExam
+export default ReactQuery

@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { model1 } from '../page/test/model1'
+import { model1 } from '../page/sample/model1'
 
 let mockList: model1[] = [
     { id: 1, name: '임꺽정1', age: 20 },
