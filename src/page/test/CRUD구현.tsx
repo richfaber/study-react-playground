@@ -129,7 +129,7 @@ function OnMounted() {
                                 return <li key={idx}>
                                     {/* 리액트는 input 의 고유 value 속성을 사용하는 경우 onChange 를 연결해야만 한다. */}
                                     <input type="checkbox" onChange={handleCheckboxChange} value={`${todo.id}`} />
-                                    이름:<input type="text" name="name" onChange={(e) => handleValueChange(e, todo.id)} value={todo.name} />
+                                    이름:<input type="text" name="name" onChange={(e) => handleValueChange(e, todo.id)} defaultValue={todo.name} />
                                     나이:<input type="number" name="age" onChange={(e) => handleValueChange(e, todo.id)} defaultValue={todo.age} style={{ width: '30px' }} />
 
                                 </li>
