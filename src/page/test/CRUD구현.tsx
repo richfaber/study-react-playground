@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from 'react-query';
 
-import type * as model1type from './model1.tsx';
+import * as model1type from './model1.tsx';
 
 const queryClient = new QueryClient()
 
@@ -13,32 +13,35 @@ async function getTodo() {
 
 }
 
-async function postTodo() {
+async function postTodo(checkedItems: string[]) {
 
-    const { data } = await axios.post<model1type.restFeedback>('/api/todo')
+    const { data } = await axios.post<model1type.restFeedback>('/api/todo', { data: checkedItems })
     return data
 
 }
 
-async function patchTodo() {
+async function patchTodo(checkedItems: string[]) {
 
-    const { data } = await axios.patch<model1type.restFeedback>('/api/todo')
+    const { data } = await axios.patch<model1type.restFeedback>('/api/todo', { data: checkedItems })
     return data
 
 }
 
-async function deleteTodo() {
+async function deleteTodo(checkedItems: string[]) {
 
-    const { data } = await axios.delete<model1type.restFeedback>('/api/todo')
+    const { data } = await axios.delete<model1type.restFeedback>('/api/todo', { data: checkedItems })
     return data
 
 }
 
 function OnMounted() {
 
-    const [ isListLoaded, setIsListLoaded ] = useState(false);
+    const [isListLoaded, setIsListLoaded] = useState(false);
+    const [checkedItems, setCheckedItems] = useState<string[]>([]);
+    const [editedItem, setEditedItem] = useState<model1type.model1[]>([]);
 
-    const { data: todoList, isLoading, isError, refetch:updateTodoList } = useQuery({
+
+    const { data: todoList, isLoading, isError, refetch: updateTodoList } = useQuery({
         queryKey: ['useQuery'],
         queryFn: getTodo,
         enabled: isListLoaded,
@@ -46,7 +49,24 @@ function OnMounted() {
         onError: () => setIsListLoaded(false)
     })
 
-    const postMutation = useMutation(postTodo, {
+    const handleCheckboxChange = function (e: React.ChangeEvent<HTMLInputElement>) {
+
+        const id = e.target.value;
+        const checked = e.target.checked;
+
+        if (checked) {
+
+            setCheckedItems(prev => [...prev, id]);
+
+        } else {
+
+            setCheckedItems(prev => prev.filter(item => item !== id));
+
+        }
+
+    }
+
+    const postMutation = useMutation(() => postTodo(checkedItems), {
 
         onSuccess: () => {
             updateTodoList();
@@ -55,7 +75,7 @@ function OnMounted() {
 
     });
 
-    const patchMutation = useMutation(patchTodo, {
+    const patchMutation = useMutation(() => patchTodo(checkedItems), {
 
         onSuccess: () => {
             updateTodoList();
@@ -64,31 +84,66 @@ function OnMounted() {
 
     })
 
-    const deleteMutation = useMutation(deleteTodo, {
+    const deleteMutation = useMutation(() => deleteTodo(checkedItems), {
 
         onSuccess: () => {
             updateTodoList();
-            console.log('Patch 성공!');
+            console.log('Delete 성공!');
         }
 
     })
+
+    useEffect(() => {
+
+        console.log('editedItem ->', editedItem)
+
+    }, [editedItem])
+
+    const handleValueChange = function (e: React.ChangeEvent<HTMLInputElement>, id: number) {
+
+        const { name, value } = e.target;
+        const updateValue = (name == 'age') ? parseInt(value, 10) : value
+
+        setEditedItem(prev => {
+            
+            const index = prev.findIndex(item => item.id === id);
+            if (index >= 0) {
+                return prev.map(item =>
+                    item.id === id ? { ...item, [name]: updateValue } : item
+                );
+            }
+            return [...prev, { id, [name]: updateValue }];
+
+        })
+
+    }
 
     return (
         <>
-            <ul>
-                {
-                    isListLoaded && todoList && (
-                        todoList?.map((todo: model1type.model1, idx: number) => {
-                            return <li key={idx}>{todo.name} {todo.age}</li>
-                        })
-                    )
-                }
-            </ul>
+            <form name="">
+                <ul>
+                    {
+                        isListLoaded && todoList && (
 
-            <button type="button" onClick={ () => updateTodoList() }>READ</button>
-            <button type="button" onClick={ () => postMutation.mutate() }>POST</button>
-            <button type="button" onClick={ () => patchMutation.mutate() }>PATCH</button>
-            <button type="button" onClick={ () => deleteMutation.mutate() }>DELETE</button>
+                            todoList?.map((todo: model1type.model1, idx: number) => {
+                                return <li key={idx}>
+                                    {/* 리액트는 input 의 고유 value 속성을 사용하는 경우 onChange 를 연결해야만 한다. */}
+                                    <input type="checkbox" onChange={handleCheckboxChange} value={`${todo.id}`} />
+                                    이름:<input type="text" name="name" onChange={(e) => handleValueChange(e, todo.id)} value={todo.name} />
+                                    나이:<input type="number" name="age" onChange={(e) => handleValueChange(e, todo.id)} defaultValue={todo.age} style={{ width: '30px' }} />
+
+                                </li>
+                            })
+
+                        )
+                    }
+                </ul>
+            </form>
+
+            <button type="button" onClick={() => updateTodoList()}>READ</button>
+            <button type="button" onClick={() => postMutation.mutate()}>POST</button>
+            <button type="button" onClick={() => patchMutation.mutate()}>PATCH</button>
+            <button type="button" onClick={() => deleteMutation.mutate()}>DELETE</button>
 
         </>
     )
@@ -96,7 +151,6 @@ function OnMounted() {
 }
 
 function CRUD() {
-
 
     return (
         <>

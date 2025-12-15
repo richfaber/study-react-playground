@@ -1,7 +1,8 @@
 
 export interface model1 {
-    name: string;
-    age: number;
+    id: number;
+    name?: string;
+    age?: number;
 }
 
 export interface restFeedback extends model1 {

@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import { model1 } from '../page/test/model1'
 
-const mockList: model1[] = [
+let mockList: model1[] = [
     { id: 1, name: '임꺽정1', age: 20 },
     { id: 2, name: '임꺽정2', age: 21 },
     { id: 3, name: '임꺽정3', age: 22 },
@@ -28,6 +28,23 @@ export const handlers = [
 
     }),
 
-    http.patch('/api/todo', () => HttpResponse.json(mockList))
+    http.patch('/api/todo', async ({ request }) => {
+
+        const newPost = await request.json() as model1;
+        
+        mockList.push(newPost)
+
+        return HttpResponse.json(newPost, { status: 201 });
+
+    }),
+
+    http.delete('/api/todo', async ({ request }) => {
+
+        const checkedPost = await request.json() as string[]
+        mockList = mockList.filter(item => !checkedPost.includes( item.id.toString() ))
+
+        return HttpResponse.json({ mockList, checkedPost }, { status: 200 })
+
+    })
 
 ]
