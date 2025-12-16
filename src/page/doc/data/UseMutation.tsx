@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useMutation } from 'react-query';
-import { model1 } from '../sample/model1';
+import { model1 } from '../../sample/model1';
 
 
 async function update() {
