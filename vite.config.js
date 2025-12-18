@@ -8,7 +8,7 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5000,
     hmr: {
-      host: '5000.devtool.codeserver.diffthink.kr',
+      host: '5000.portfolio.codeserver.diffthink.kr',
       protocol: 'wss'
     }
   },

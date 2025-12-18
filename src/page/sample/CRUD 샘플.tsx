@@ -36,16 +36,22 @@ async function deleteTodo(checkedItems: string[]) {
 
 function OnMounted() {
 
-    const [isListLoaded, setIsListLoaded] = useState(false);
-    const [checkedItems, setCheckedItems] = useState<string[]>([]);
-    const [editedItem, setEditedItem] = useState<model1type.model1[]>([]);
+    const [localTodoList, setLocalTodoList] = useState<model1type.model1[]>([]);
 
+    const [editedItem, setEditedItem] = useState<model1type.model1[]>([]);
+    const [checkedItems, setCheckedItems] = useState<string[]>([]);
+
+    const [isListLoaded, setIsListLoaded] = useState(false);
 
     const { data: todoList, isLoading, isError, refetch: updateTodoList } = useQuery({
         queryKey: ['useQuery'],
         queryFn: getTodo,
         enabled: isListLoaded,
-        onSuccess: () => setIsListLoaded(true),
+        onSuccess: (data) => {
+            setLocalTodoList(data);
+            setEditedItem([]);
+            setCheckedItems([]);
+        },
         onError: () => setIsListLoaded(false)
     })
 
@@ -115,7 +121,7 @@ function OnMounted() {
             return [...prev, { id, [name]: updateValue }];
 
         })
-
+    
     }
 
     return (
@@ -123,16 +129,21 @@ function OnMounted() {
             <form name="">
                 <ul>
                     {
-                        isListLoaded && todoList && (
+                        isListLoaded && localTodoList && (
 
-                            todoList?.map((todo: model1type.model1, idx: number) => {
+                            localTodoList.map((todo: model1type.model1, idx: number) => {
+
                                 return <li key={idx}>
                                     {/* 리액트는 input 의 고유 value 속성을 사용하는 경우 onChange 를 연결해야만 한다. */}
                                     <input type="checkbox" onChange={handleCheckboxChange} value={`${todo.id}`} />
                                     이름:<input type="text" name="name" onChange={(e) => handleValueChange(e, todo.id)} defaultValue={todo.name} />
                                     나이:<input type="number" name="age" onChange={(e) => handleValueChange(e, todo.id)} defaultValue={todo.age} style={{ width: '30px' }} />
 
+                                    unControllName:<input type="text" name="unControllName" defaultValue={todo.name} />
+                                    unControllAge:<input type="number" name="unControllAge" defaultValue={todo.age} style={{ width: '30px' }} />
+
                                 </li>
+
                             })
 
                         )
